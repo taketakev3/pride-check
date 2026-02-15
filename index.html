@@ -148,7 +148,6 @@ button {
 </style>
 </head>
 <body>
-<div id="panel1" class="input-panel">
   <h2>PRIDE　参加者確認</h2>
 
   <!-- 横並びボタン -->
@@ -157,7 +156,6 @@ button {
     <button id="btn2" onclick="showPanel(2)">マークスマン</button>
     <button id="btn3" onclick="showPanel(3)">レディース</button>
   </div>
-</div>
 
 <!-- ボタン1用 -->
 <div id="panel1" class="input-panel">
@@ -208,12 +206,7 @@ button {
 </div>
 
 
-<script>
-  // ▼ 初期表示の背景画像
-document.body.style.backgroundImage = "url('cod.webp')";
-document.body.style.backgroundSize = "cover";
-document.body.style.backgroundPosition = "center";
-  
+<script> 
 // ▼ ボタン1用の「正しい組み合わせ」
 const pairList1 = [
   { game: "ゆきや", parallel: "隊長" },
@@ -247,17 +240,6 @@ function showPanel(num) {
   document.querySelectorAll('.button-row button').forEach(btn => btn.classList.remove('selected'));
   document.getElementById(`btn${num}`).classList.add('selected');
 
-  // ▼ 背景画像切り替え
-  if (num === 1) {
-    document.body.style.backgroundImage = "url('sr.webp')";
-  } else if (num === 2) {
-    document.body.style.backgroundImage = "url('ma.webp')";
-  } else {
-    document.body.style.backgroundImage = "url('レディース.webp')";
-  }
-
-  document.body.style.backgroundSize = "cover";
-  document.body.style.backgroundPosition = "center";
 }
 
 // ▼ 判定処理（組み合わせチェック）
