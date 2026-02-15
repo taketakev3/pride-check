@@ -148,14 +148,15 @@ button {
 </style>
 </head>
 <body>
+<div id="panel1" class="input-panel">
+  <h2>PRIDE　参加者確認</h2>
 
-<h2>PRIDE　参加者確認</h2>
-
-<!-- 横並びボタン -->
-<div class="button-row">
-  <button id="btn1" onclick="showPanel(1)">SR</button>
-  <button id="btn2" onclick="showPanel(2)">マークスマン</button>
-  <button id="btn3" onclick="showPanel(3)">レディース</button>
+  <!-- 横並びボタン -->
+  <div class="button-row">
+    <button id="btn1" onclick="showPanel(1)">SR</button>
+    <button id="btn2" onclick="showPanel(2)">マークスマン</button>
+    <button id="btn3" onclick="showPanel(3)">レディース</button>
+  </div>
 </div>
 
 <!-- ボタン1用 -->
@@ -198,13 +199,14 @@ button {
 
   <button onclick="checkEntry(3)">判定</button>
   <div id="msg3"></div>
-</div>
-<div class="notice">
+  <div class="notice">
    ・ゲーム名とパラレル名は正確に入力してください。<br>
    ・抽選後に名前を変更された場合は、変更前の名前を入力してください。<br>
    ・お困りごとがございましたら隊長までご連絡ください。<a href="https://www.tiktok.com/@captain122483" target="_blank">（ヘルパー隊長）</a><br>
    <span class="warning">※いたずらでのご連絡の場合、今後の参加資格をはく奪される可能性がございます。ご了承ください。</span>
+   </div>
 </div>
+
 
 <script>
   // ▼ 初期表示の背景画像
