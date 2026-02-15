@@ -41,20 +41,25 @@ body {
 /* 入力パネル */
 .input-panel {
   display: none;
-  padding: 15px;
-  border: 1px solid #aaa;
-  width: 280px;
+  padding: 25px;              /* ← パネルの余白を増やして“6rem相当の大きさ”に */
+  border: 2px solid #aaa;
+  width: 320px;               /* ← 少し広げて見やすく */
   background: #ffffff;
-  border-radius: 8px;
-  height: 6rem;        /* ← 追加：パネルの高さを6remに */
-  overflow: hidden;    /* ← 内容がはみ出るのを防ぐ */
+  border-radius: 10px;
 }
 
+/* 注意書き全体 */
 .notice {
-  margin-top: 10px;
-  font-size: 14px;
-  color: #555;
-  line-height: 1.4;
+  margin-top: 20px;
+  font-size: 18px;            /* ← 大きく */
+  font-weight: bold;          /* ← 太く */
+  color: #444;
+  line-height: 1.6;
+}
+
+/* 「※」の行だけ赤色にする */
+.notice .warning {
+  color: red;
 }
 
 .panel-title {
@@ -188,7 +193,7 @@ button {
    ・ゲーム名とパラレル名は正確に入力してください。<br>
    ・抽選後に名前を変更された場合は、変更前の名前を入力してください。<br>
    ・お困りごとがございましたら隊長までご連絡ください。（TikTokのアカウントのURL）<br>
-   ※いたずらでのご連絡の場合、今後の参加資格をはく奪される可能性がございます。ご了承ください。
+   <span class="warning">※いたずらでのご連絡の場合、今後の参加資格をはく奪される可能性がございます。ご了承ください。</span>
 </div>
 
 <script>
