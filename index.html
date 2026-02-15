@@ -239,6 +239,18 @@ function showPanel(num) {
 
   document.querySelectorAll('.button-row button').forEach(btn => btn.classList.remove('selected'));
   document.getElementById(`btn${num}`).classList.add('selected');
+
+  // ▼ 背景画像切り替え
+  if (num === 1) {
+    document.body.style.backgroundImage = "url('https://www.bing.com/images/search?view=detailV2&ccid=OE7kxixu&id=271301828D4936FC3DDB76DE6F8140C5F182FFB6&thid=OIP.OE7kxixu-7rdV_pmWUT7EgHaEK&mediaurl=https%3a%2f%2fcdn1.dotesports.com%2fwp-content%2fuploads%2f2020%2f04%2f02142718%2fGarenaWorld.png&exph=667&expw=1185&q=cod%e3%83%a2%e3%83%90%e3%82%a4%e3%83%ab&FORM=IRPRST&ck=3CD2F6815A1F5FA3CA13A2FCE3C89080&selectedIndex=0&itb=0')";
+  } else if (num === 2) {
+    document.body.style.backgroundImage = "url('https://www.bing.com/images/search?view=detailV2&ccid=oks4aAAH&id=006CD8DB9300862CDEB69624FC5C421B6E0101BD&thid=OIP.oks4aAAHAQE_De1au69KtAHaEK&mediaurl=https%3a%2f%2fmp1st.com%2fwp-content%2fuploads%2f2022%2f02%2fCODM-S2-2022-ANNOUNCEMENT-TOUT.jpg&exph=1080&expw=1920&q=cod%e3%83%a2%e3%83%90%e3%82%a4%e3%83%ab&FORM=IRPRST&ck=9E6964ADAF7A972F8214242EA52500A6&selectedIndex=74&itb=0')";
+  } else {
+    document.body.style.backgroundImage = "url('https://www.bing.com/images/search?view=detailV2&ccid=4Nf8BCc6&id=1EB7044AC85F17E4C13EDB7AAD5F592F8EDD3761&thid=OIP.4Nf8BCc6qwi9BxoAIQXGSgHaEK&mediaurl=https%3a%2f%2fmp1st.com%2fwp-content%2fuploads%2f2022%2f07%2fKA1.png&exph=1080&expw=1920&q=cod%e3%83%a2%e3%83%90%e3%82%a4%e3%83%ab&FORM=IRPRST&ck=90B1D7365AE71101E0B48F6A8524399B&selectedIndex=10&itb=0')";
+  }
+
+  document.body.style.backgroundSize = "cover";
+  document.body.style.backgroundPosition = "center";
 }
 
 // ▼ 判定処理（組み合わせチェック）
