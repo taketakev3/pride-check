@@ -11,37 +11,35 @@ body {
   background: #f5f5f5;
 }
 
-/* タイトルバー（大きくしたバージョン） */
+/* ▼ ヘッダー（大きくしたバージョン） */
 .header {
   width: 100%;
-  height: 16rem;                 /* ← 高さアップ（60 → 90） */
+  height: 16rem; /* ← 高さアップ */
   background: #222;
   color: white;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 30px;              /* ← 横の余白も広く */
+  padding: 0 30px;
   box-sizing: border-box;
 }
 
-/* タイトル（大きく） */
 .header-title {
-  font-size: 36px;              /* ← 28 → 36 にアップ */
+  font-size: 36px;
   font-weight: bold;
 }
 
-/* ハンバーガー（大きく） */
 .menu-btn {
-  font-size: 40px;              /* ← 30 → 40 にアップ */
+  font-size: 40px;
   cursor: pointer;
   user-select: none;
 }
 
-/* サイドメニュー（右からスライド） */
+/* ▼ サイドメニュー（右からスライド） */
 .side-menu {
   position: fixed;
   top: 0;
-  right: -36rem; /* 初期は隠す */
+  right: -36rem; /* ← メニュー幅と同じにして完全に隠す */
   width: 36rem;
   height: 100%;
   background: #333;
@@ -49,10 +47,11 @@ body {
   padding-top: 60px;
   box-sizing: border-box;
   transition: right 0.3s ease;
+  z-index: 10; /* ← メニューを最前面に */
 }
 
 .side-menu.open {
-  right: 0; /* 開く */
+  right: 0;
 }
 
 .side-menu a {
@@ -68,7 +67,19 @@ body {
   background: #444;
 }
 
-/* メインコンテンツ */
+/* ▼ メニュー外の黒いカバー（クリックで閉じる） */
+.menu-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.4);
+  display: none; /* 初期は非表示 */
+  z-index: 5;    /* メニューより下、画面より上 */
+}
+
+/* ▼ メインコンテンツ */
 .main-content {
   padding: 40px;
   text-align: center;
@@ -97,6 +108,9 @@ body {
   <a href="参加者確認.html">参加者確認</a>
 </div>
 
+<!-- ▼ メニュー外クリック用の黒カバー -->
+<div id="menuOverlay" class="menu-overlay" onclick="closeMenu()"></div>
+
 <!-- メイン表示部分 -->
 <div class="main-content">
   ようこそ、PRIDE メインページへ。
@@ -104,7 +118,24 @@ body {
 
 <script>
 function toggleMenu() {
-  document.getElementById("sideMenu").classList.toggle("open");
+  const menu = document.getElementById("sideMenu");
+  const overlay = document.getElementById("menuOverlay");
+
+  menu.classList.toggle("open");
+
+  if (menu.classList.contains("open")) {
+    overlay.style.display = "block";  // カバー表示
+  } else {
+    overlay.style.display = "none";   // カバー非表示
+  }
+}
+
+function closeMenu() {
+  const menu = document.getElementById("sideMenu");
+  const overlay = document.getElementById("menuOverlay");
+
+  menu.classList.remove("open");
+  overlay.style.display = "none";
 }
 </script>
 
