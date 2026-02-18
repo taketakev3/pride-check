@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>PRIDE データ追加ページ</title>
+<title>PRIDE エントリーページ</title>
 
 <style>
 body {
@@ -14,7 +14,6 @@ body {
   padding: 40px 0;
 }
 
-/* 全体パネル */
 .outer-panel {
   background: #ffffff;
   width: 60rem;
@@ -30,7 +29,6 @@ h2 {
   margin-top: 0;
 }
 
-/* ボタン横並び */
 .button-row {
   display: flex;
   gap: 20px;
@@ -54,7 +52,6 @@ h2 {
   font-weight: bold;
 }
 
-/* 入力パネル */
 .input-panel {
   display: none;
   padding: 20px;
@@ -96,7 +93,6 @@ button.add-btn:hover {
   background: #1d6fd6;
 }
 
-/* 一覧表示 */
 .list-box {
   margin-top: 30px;
   padding: 20px;
@@ -111,17 +107,12 @@ button.add-btn:hover {
   font-size: 18px;
 }
 
-/* ▼ 注意書き（1回だけ表示） */
 .notice {
   margin-top: 30px;
   font-size: 18px;
   font-weight: bold;
   color: #444;
   line-height: 1.6;
-}
-
-.notice .warning {
-  color: red;
 }
 </style>
 </head>
@@ -132,14 +123,12 @@ button.add-btn:hover {
 
   <h2>PRIDE エントリーページ</h2>
 
-  <!-- 部門ボタン -->
   <div class="button-row">
     <button id="btn1" onclick="showPanel(1)">SR</button>
     <button id="btn2" onclick="showPanel(2)">マークスマン</button>
     <button id="btn3" onclick="showPanel(3)">レディース</button>
   </div>
 
-  <!-- SR -->
   <div id="panel1" class="input-panel">
     <label>ゲームの名前：</label>
     <input type="text" id="game1">
@@ -150,7 +139,6 @@ button.add-btn:hover {
     <button class="add-btn" onclick="addEntry(1)">エントリーする</button>
   </div>
 
-  <!-- マークスマン -->
   <div id="panel2" class="input-panel">
     <label>ゲームの名前：</label>
     <input type="text" id="game2">
@@ -161,7 +149,6 @@ button.add-btn:hover {
     <button class="add-btn" onclick="addEntry(2)">エントリーする</button>
   </div>
 
-  <!-- レディース -->
   <div id="panel3" class="input-panel">
     <label>ゲームの名前：</label>
     <input type="text" id="game3">
@@ -172,20 +159,17 @@ button.add-btn:hover {
     <button class="add-btn" onclick="addEntry(3)">エントリーする</button>
   </div>
 
-  <!-- 一覧表示 -->
   <div class="list-box">
-    <h3>現在の登録データ</h3>
+    <h3>現在の登録データ（Firebase）</h3>
     <div id="entryList"></div>
   </div>
 
-  <!-- ▼ 注意書き（1回だけ） -->
   <div class="notice">
     ・入力内容は正確に記入してください。<br>
-    ・抽選後に名前を変更した場合は、抽選などは変更前の名前が使用されます。。<br>
-    ・お困りの際は隊長までご連絡ください。<a href="https://www.tiktok.com/@captain122483" target="_blank">（ヘルパー隊長）</a>
+    ・抽選後に名前を変更した場合は、抽選などは変更前の名前が使用されます。<br>
+    ・お困りの際は隊長までご連絡ください。
   </div>
 
-  <!-- 戻る -->
   <div style="text-align:center; margin-top:25px;">
     <a href="index.html">
       <button style="padding:12px 25px; font-size:20px;">← メインページへ戻る</button>
@@ -194,89 +178,99 @@ button.add-btn:hover {
 
 </div>
 
-<script>
-// ▼ localStorage から読み込み（部門ごとに分ける）
-let dataSR = JSON.parse(localStorage.getItem("pride_SR")) || [];
-let dataMarksman = JSON.parse(localStorage.getItem("pride_Marksman")) || [];
-let dataLadies = JSON.parse(localStorage.getItem("pride_Ladies")) || [];
+<!-- Firebase 読み込み -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+  import { getFirestore, collection, addDoc, getDocs } 
+    from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
 
-// ▼ パネル切り替え
-function showPanel(num) {
-  document.querySelectorAll('.input-panel').forEach(p => p.style.display = 'none');
-  document.getElementById(`panel${num}`).style.display = 'block';
-
-  document.querySelectorAll('.button-row button').forEach(btn => btn.classList.remove('selected'));
-  document.getElementById(`btn${num}`).classList.add('selected');
-}
-
-// ▼ データ追加
-function addEntry(num) {
-  const game = document.getElementById(`game${num}`).value.trim();
-  const parallel = document.getElementById(`parallel${num}`).value.trim();
-
-  if (!game || !parallel) {
-    alert("両方入力してください");
-    return;
-  }
-
-  // ▼ ここで確認ダイアログを出す
-  const ok = confirm(
-    `以下の内容でエントリーします。\n\n` +
-    `【ゲーム名】${game}\n` +
-    `【パラレル名】${parallel}\n\n` +
-    `よろしいですか？`
-  );
-
-  if (!ok) {
-    return; // キャンセルされたら登録しない
-  }
-
-  let target;
-
-  if (num === 1) target = dataSR;
-  if (num === 2) target = dataMarksman;
-  if (num === 3) target = dataLadies;
-
-  target.push({ game, parallel });
-
-  // 保存
-  localStorage.setItem("pride_SR", JSON.stringify(dataSR));
-  localStorage.setItem("pride_Marksman", JSON.stringify(dataMarksman));
-  localStorage.setItem("pride_Ladies", JSON.stringify(dataLadies));
-
-  renderList();
-
-  document.getElementById(`game${num}`).value = "";
-  document.getElementById(`parallel${num}`).value = "";
-}
-
-// ▼ 一覧表示
-function renderList() {
-  const list = document.getElementById("entryList");
-  list.innerHTML = "";
-
-  const addSection = (title, arr) => {
-    const h = document.createElement("div");
-    h.style.fontWeight = "bold";
-    h.style.marginTop = "15px";
-    h.textContent = `■ ${title}`;
-    list.appendChild(h);
-
-    arr.forEach((item, index) => {
-      const div = document.createElement("div");
-      div.className = "entry-item";
-      div.textContent = `${index + 1}. ゲーム名：${item.game} ｜ パラレル名：${item.parallel}`;
-      list.appendChild(div);
-    });
+  const firebaseConfig = {
+    apiKey: "AIzaSyCXM0o3jdiQotHdJM_PSFv4Lyf2NSFZdLQ",
+    authDomain: "pride-storage.firebaseapp.com",
+    projectId: "pride-storage",
+    storageBucket: "pride-storage.firebasestorage.app",
+    messagingSenderId: "1053485716586",
+    appId: "1:1053485716586:web:481f3116e4988f7da16613"
   };
 
-  addSection("SR", dataSR);
-  addSection("マークスマン", dataMarksman);
-  addSection("レディース", dataLadies);
-}
+  const app = initializeApp(firebaseConfig);
+  const db = getFirestore(app);
 
-// 初期表示
-renderList();
+  function showPanel(num) {
+    document.querySelectorAll('.input-panel').forEach(p => p.style.display = 'none');
+    document.getElementById(`panel${num}`).style.display = 'block';
+
+    document.querySelectorAll('.button-row button').forEach(btn => btn.classList.remove('selected'));
+    document.getElementById(`btn${num}`).classList.add('selected');
+  }
+
+  async function addEntry(num) {
+    const game = document.getElementById(`game${num}`).value.trim();
+    const parallel = document.getElementById(`parallel${num}`).value.trim();
+
+    if (!game || !parallel) {
+      alert("両方入力してください");
+      return;
+    }
+
+    const ok = confirm(
+      `以下の内容でエントリーします。\n\n` +
+      `【ゲーム名】${game}\n` +
+      `【パラレル名】${parallel}\n\n` +
+      `よろしいですか？`
+    );
+
+    if (!ok) return;
+
+    const colName =
+      num === 1 ? "entries_SR" :
+      num === 2 ? "entries_Marksman" :
+                  "entries_Ladies";
+
+    await addDoc(collection(db, colName), {
+      game: game,
+      parallel: parallel,
+      timestamp: Date.now()
+    });
+
+    alert("エントリーが完了しました");
+
+    document.getElementById(`game${num}`).value = "";
+    document.getElementById(`parallel${num}`).value = "";
+
+    loadList();
+  }
+
+  async function loadList() {
+    const list = document.getElementById("entryList");
+    list.innerHTML = "";
+
+    async function addSection(title, colName) {
+      const h = document.createElement("div");
+      h.style.fontWeight = "bold";
+      h.style.marginTop = "15px";
+      h.textContent = `■ ${title}`;
+      list.appendChild(h);
+
+      const querySnapshot = await getDocs(collection(db, colName));
+      let index = 1;
+
+      querySnapshot.forEach(doc => {
+        const item = doc.data();
+        const div = document.createElement("div");
+        div.className = "entry-item";
+        div.textContent = `${index}. ゲーム名：${item.game} ｜ パラレル名：${item.parallel}`;
+        list.appendChild(div);
+        index++;
+      });
+    }
+
+    await addSection("SR", "entries_SR");
+    await addSection("マークスマン", "entries_Marksman");
+    await addSection("レディース", "entries_Ladies");
+  }
+
+  loadList();
 </script>
 
 </body>
