@@ -248,27 +248,6 @@ function addEntry(num) {
 
   document.getElementById(`game${num}`).value = "";
   document.getElementById(`parallel${num}`).value = "";
-
-  alert("エントリーが完了しました");
-}
-
-  let target;
-
-  if (num === 1) target = dataSR;
-  if (num === 2) target = dataMarksman;
-  if (num === 3) target = dataLadies;
-
-  target.push({ game, parallel });
-
-  // 保存
-  localStorage.setItem("pride_SR", JSON.stringify(dataSR));
-  localStorage.setItem("pride_Marksman", JSON.stringify(dataMarksman));
-  localStorage.setItem("pride_Ladies", JSON.stringify(dataLadies));
-
-  renderList();
-
-  document.getElementById(`game${num}`).value = "";
-  document.getElementById(`parallel${num}`).value = "";
 }
 
 // ▼ 一覧表示
