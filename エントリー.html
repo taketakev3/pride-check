@@ -265,9 +265,10 @@ button.add-btn:hover {
       });
     }
 
-    await addSection("SR", "entries_SR");
-    await addSection("マークスマン", "entries_Marksman");
-    await addSection("レディース", "entries_Ladies");
+  window.showPanel = showPanel;
+  window.addEntry = addEntry;
+  window.loadList = loadList;
+
   }
 
   loadList();
