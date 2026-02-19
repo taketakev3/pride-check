@@ -2,67 +2,132 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>PRIDE Entry</title>
+  <title>PRIDE エントリー</title>
   <style>
     body {
       font-family: sans-serif;
-      padding: 20px;
       background: #f5f5f5;
+      padding: 20px;
+      text-align: center;
     }
+
+    .btn-group {
+      margin-bottom: 20px;
+    }
+
+    .btn-group button {
+      padding: 10px 20px;
+      margin: 5px;
+      font-size: 18px;
+      border: none;
+      border-radius: 5px;
+      background: #ddd;
+      cursor: pointer;
+    }
+
+    .btn-group button.active {
+      background: #007bff;
+      color: white;
+    }
+
     .panel {
+      display: none;
       background: white;
       padding: 20px;
       border-radius: 10px;
       max-width: 500px;
       margin: auto;
       box-shadow: 0 0 10px rgba(0,0,0,0.1);
+      text-align: left;
     }
-    input, select, button {
+
+    input {
       width: 100%;
-      padding: 10px;
+      padding: 12px;
       margin-top: 10px;
       font-size: 16px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
     }
-    button {
-      background: #007bff;
+
+    button.submit {
+      width: 100%;
+      padding: 12px;
+      margin-top: 20px;
+      background: #28a745;
       color: white;
       border: none;
       border-radius: 5px;
+      font-size: 18px;
     }
-    .list {
+
+    .notice {
       margin-top: 20px;
+      font-size: 14px;
+      color: #555;
+      line-height: 1.6;
+    }
+
+    .back {
+      margin-top: 30px;
+      display: inline-block;
+      padding: 10px 20px;
+      background: #444;
+      color: white;
+      border-radius: 5px;
+      text-decoration: none;
     }
   </style>
 </head>
 <body>
 
-<div class="panel">
-  <h2>PRIDE エントリー</h2>
+<h2>PRIDE エントリー</h2>
 
-  <select id="division">
-    <option value="entries_SR">SR</option>
-    <option value="entries_Marksman">マークスマン</option>
-    <option value="entries_Ladies">レディース</option>
-  </select>
-
-  <input id="name1" placeholder="名前1">
-  <input id="name2" placeholder="名前2">
-
-  <button onclick="addEntry()">エントリー追加</button>
-
-  <div class="list" id="list"></div>
+<div class="btn-group">
+  <button id="btnSR" class="active">SR</button>
+  <button id="btnMarksman">マークスマン</button>
+  <button id="btnLadies">レディース</button>
 </div>
 
-<!-- Firebase SDK -->
+<!-- SR -->
+<div id="panelSR" class="panel" style="display:block;">
+  <input id="srName1" placeholder="ゲーム名">
+  <input id="srName2" placeholder="パラレル名">
+  <button class="submit" onclick="addEntry('entries_SR', 'srName1', 'srName2')">エントリー追加</button>
+</div>
+
+<!-- Marksman -->
+<div id="panelMarksman" class="panel">
+  <input id="mkName1" placeholder="ゲーム名">
+  <input id="mkName2" placeholder="パラレル名">
+  <button class="submit" onclick="addEntry('entries_Marksman', 'mkName1', 'mkName2')">エントリー追加</button>
+</div>
+
+<!-- Ladies -->
+<div id="panelLadies" class="panel">
+  <input id="ldName1" placeholder="ゲーム名">
+  <input id="ldName2" placeholder="パラレル名">
+  <button class="submit" onclick="addEntry('entries_Ladies', 'ldName1', 'ldName2')">エントリー追加</button>
+</div>
+
+<div class="notice">
+  ※ 入力内容は正確にお願いします。<br>
+  ※ 抽選後の名前変更はできません。<br>
+  ※ 不明点があればチームリーダーまで。<br>
+  TikTok: <a href="https://www.tiktok.com/@captain122483" target="_blank">https://www.tiktok.com/@captain122483</a>
+</div>
+
+<a href="index.html" class="back">メインページへ戻る</a>
+
+<!-- Firebase -->
 <script type="module">
-  // Firebase SDK 読み込み
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore, collection, addDoc, getDocs } 
+  import { getFirestore, collection, addDoc } 
     from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
   import { getAuth, signInAnonymously } 
     from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  // あなたの Firebase 設定
+  // あなたの Firebase 設定を入れてね
   const firebaseConfig = {
     apiKey: "YOUR_API_KEY",
     authDomain: "YOUR_PROJECT.firebaseapp.com",
@@ -72,65 +137,55 @@
     appId: "YOUR_APP_ID"
   };
 
-  // Firebase 初期化
   const app = initializeApp(firebaseConfig);
   const db = getFirestore(app);
 
-  // 🔥 匿名ログイン（ここが今回の最重要ポイント）
+  // 🔥 匿名ログイン（最重要）
   const auth = getAuth();
   signInAnonymously(auth)
-    .then(() => {
-      console.log("匿名ログイン成功");
-      loadList(); // ログイン後に読み込み開始
-    })
-    .catch((error) => {
-      console.error("匿名ログイン失敗:", error);
-    });
+    .then(() => console.log("匿名ログイン成功"))
+    .catch(err => console.error("匿名ログイン失敗:", err));
 
-  // エントリー追加
-  async function addEntry() {
-    const division = document.getElementById("division").value;
-    const name1 = document.getElementById("name1").value.trim();
-    const name2 = document.getElementById("name2").value.trim();
+  // 🔥 パネル切り替え
+  function showPanel(target) {
+    document.querySelectorAll(".panel").forEach(p => p.style.display = "none");
+    document.getElementById("panel" + target).style.display = "block";
+
+    document.querySelectorAll(".btn-group button").forEach(b => b.classList.remove("active"));
+    document.getElementById("btn" + target).classList.add("active");
+
+    clearInputs();
+  }
+
+  // 🔥 入力欄クリア
+  function clearInputs() {
+    document.querySelectorAll("input").forEach(i => i.value = "");
+  }
+
+  // ボタンイベント
+  document.getElementById("btnSR").onclick = () => showPanel("SR");
+  document.getElementById("btnMarksman").onclick = () => showPanel("Marksman");
+  document.getElementById("btnLadies").onclick = () => showPanel("Ladies");
+
+  // 🔥 Firestore 追加
+  async function addEntry(collectionName, id1, id2) {
+    const name1 = document.getElementById(id1).value.trim();
+    const name2 = document.getElementById(id2).value.trim();
 
     if (!name1 || !name2) {
       alert("名前を入力してください");
       return;
     }
 
-    await addDoc(collection(db, division), {
-      name1: name1,
-      name2: name2,
+    await addDoc(collection(db, collectionName), {
+      name1,
+      name2,
       time: new Date()
     });
 
-    alert("追加しました");
-    loadList();
+    alert("エントリーを追加しました");
+    clearInputs();
   }
-
-  // 一覧読み込み
-  async function loadList() {
-    const division = document.getElementById("division").value;
-    const list = document.getElementById("list");
-    list.innerHTML = "読み込み中…";
-
-    const snap = await getDocs(collection(db, division));
-
-    let html = "";
-    snap.forEach(doc => {
-      const d = doc.data();
-      html += `<div>${d.name1} ＆ ${d.name2}</div>`;
-    });
-
-    list.innerHTML = html || "まだエントリーがありません";
-  }
-
-  // セレクト変更時に再読み込み
-  document.getElementById("division").addEventListener("change", loadList);
-  document.getElementById("division").addEventListener("change", () => {
-  document.getElementById("name1").value = "";
-  document.getElementById("name2").value = "";
-});
 </script>
 
 </body>
