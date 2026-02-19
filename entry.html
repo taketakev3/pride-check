@@ -2,41 +2,40 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>PRIDE 参加者確認</title>
+<title>PRIDE エントリーページ</title>
 
 <style>
-/* ▼ 背景画像 */
 body {
   margin: 0;
-  background-size: cover;
-  background-position: top center;
-  background-attachment: fixed;
+  background: #e9e9e9;
   font-size: 20px;
   display: flex;
   justify-content: center;
   padding: 40px 0;
 }
 
-/* ▼ 白パネル */
 .outer-panel {
-  background: rgba(255, 255, 255, 0.92);
+  background: #ffffff;
   width: 60rem;
   max-width: 95%;
   padding: 30px 40px;
   border-radius: 15px;
-  box-shadow: 0 0 20px rgba(0,0,0,0.25);
+  box-shadow: 0 0 15px rgba(0,0,0,0.15);
   box-sizing: border-box;
 }
 
-h2 { text-align: center; margin-top: 0; }
+h2 {
+  text-align: center;
+  margin-top: 0;
+}
 
-/* ▼ 3ボタン */
 .button-row {
   display: flex;
   gap: 20px;
   margin-bottom: 30px;
   justify-content: center;
 }
+
 .button-row button {
   padding: 12px 20px;
   font-size: 20px;
@@ -45,6 +44,7 @@ h2 { text-align: center; margin-top: 0; }
   cursor: pointer;
   border-radius: 6px;
 }
+
 .button-row button.selected {
   background: #4da3ff;
   color: white;
@@ -52,10 +52,8 @@ h2 { text-align: center; margin-top: 0; }
   font-weight: bold;
 }
 
-/* ▼ 入力パネル */
 .input-panel {
   display: none;
-  width: 100%;
   padding: 20px;
   border: 2px solid #aaa;
   background: #ffffff;
@@ -64,14 +62,12 @@ h2 { text-align: center; margin-top: 0; }
   box-sizing: border-box;
 }
 
-.panel-title {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 15px;
-  text-align: center;
+label {
+  display: block;
+  margin-top: 15px;
+  font-size: 18px;
 }
 
-label { display: block; margin-top: 12px; font-size: 18px; }
 input {
   width: 100%;
   padding: 10px;
@@ -79,28 +75,44 @@ input {
   border-radius: 6px;
   border: 1px solid #aaa;
   box-sizing: border-box;
+  font-size: 18px;
 }
 
-button { font-size: 18px; padding: 10px 16px; margin-top: 15px; }
-
-.error { color: red; margin-top: 15px; font-size: 18px; }
-.ok { color: green; margin-top: 15px; font-size: 18px; }
-
-/* ▼ 注意事項 */
-.notice {
+button.add-btn {
   margin-top: 20px;
+  padding: 12px 20px;
+  font-size: 20px;
+  border-radius: 8px;
+  border: none;
+  background: #4da3ff;
+  color: white;
+  cursor: pointer;
+}
+
+button.add-btn:hover {
+  background: #1d6fd6;
+}
+
+.list-box {
+  margin-top: 30px;
+  padding: 20px;
+  background: #fafafa;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+}
+
+.entry-item {
+  padding: 8px 0;
+  border-bottom: 1px solid #ddd;
+  font-size: 18px;
+}
+
+.notice {
+  margin-top: 30px;
   font-size: 18px;
   font-weight: bold;
   color: #444;
   line-height: 1.6;
-}
-.notice .warning { color: red; }
-
-/* ▼ スマホ対応 */
-@media (max-width: 600px) {
-  .button-row { flex-wrap: wrap; gap: 10px; }
-  .button-row button { flex: 1 1 40%; min-width: 120px; font-size: 18px; }
-  .outer-panel { padding: 20px; }
 }
 </style>
 </head>
@@ -109,7 +121,7 @@ button { font-size: 18px; padding: 10px 16px; margin-top: 15px; }
 
 <div class="outer-panel">
 
-  <h2>PRIDE 参加者確認</h2>
+  <h2>PRIDE エントリーページ</h2>
 
   <!-- 3ボタン -->
   <div class="button-row">
@@ -120,49 +132,52 @@ button { font-size: 18px; padding: 10px 16px; margin-top: 15px; }
 
   <!-- SR -->
   <div id="panel1" class="input-panel">
-    <div class="panel-title">SR部門</div>
     <label>ゲームの名前：</label>
     <input type="text" id="game1">
+
     <label>パラレルの名前：</label>
     <input type="text" id="parallel1">
-    <button onclick="checkEntry(1)">判定</button>
-    <div id="msg1"></div>
+
+    <button class="add-btn" onclick="addEntry(1)">エントリーする</button>
   </div>
 
   <!-- Marksman -->
   <div id="panel2" class="input-panel">
-    <div class="panel-title">マークスマン部門</div>
     <label>ゲームの名前：</label>
     <input type="text" id="game2">
+
     <label>パラレルの名前：</label>
     <input type="text" id="parallel2">
-    <button onclick="checkEntry(2)">判定</button>
-    <div id="msg2"></div>
+
+    <button class="add-btn" onclick="addEntry(2)">エントリーする</button>
   </div>
 
   <!-- Ladies -->
   <div id="panel3" class="input-panel">
-    <div class="panel-title">レディース部門</div>
     <label>ゲームの名前：</label>
     <input type="text" id="game3">
+
     <label>パラレルの名前：</label>
     <input type="text" id="parallel3">
-    <button onclick="checkEntry(3)">判定</button>
-    <div id="msg3"></div>
+
+    <button class="add-btn" onclick="addEntry(3)">エントリーする</button>
   </div>
 
-  <!-- 注意事項 -->
+  <!-- 一覧 -->
+  <div class="list-box">
+    <h3>現在の登録データ（Firebase）</h3>
+    <div id="entryList"></div>
+  </div>
+
   <div class="notice">
-    ・ゲーム名とパラレル名は正確に入力してください。<br>
-    ・抽選後に名前を変更された場合は、変更前の名前を入力してください。<br>
-    ・お困りごとがございましたら隊長までご連絡ください。
-      <a href="https://www.tiktok.com/@captain122483" target="_blank">（ヘルパー隊長）</a><br>
-    <span class="warning">※いたずらの場合、今後の参加資格をはく奪される可能性があります。</span>
+    ・入力内容は正確に記入してください。<br>
+    ・抽選後に名前を変更した場合は、抽選などは変更前の名前が使用されます。<br>
+    ・お困りの際は隊長までご連絡ください。
   </div>
 
   <div style="text-align:center; margin-top:25px;">
     <a href="index.html">
-      <button style="font-size:20px; padding:12px 25px;">← メインページへ戻る</button>
+      <button style="padding:12px 25px; font-size:20px;">← メインページへ戻る</button>
     </a>
   </div>
 
@@ -171,19 +186,18 @@ button { font-size: 18px; padding: 10px 16px; margin-top: 15px; }
 <!-- Firebase -->
 <script type="module">
   import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-  import { getFirestore, collection, getDocs } 
+  import { getFirestore, collection, addDoc, getDocs }
     from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-  import { getAuth, signInAnonymously } 
+  import { getAuth, signInAnonymously }
     from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-  // ★ あなたの Firebase 設定
   const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_PROJECT.firebaseapp.com",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_PROJECT.appspot.com",
-    messagingSenderId: "YOUR_SENDER_ID",
-    appId: "YOUR_APP_ID"
+    apiKey: "AIzaSyCXM0o3jdiQotHdJM_PSFv4Lyf2NSFZdLQ",
+    authDomain: "pride-storage.firebaseapp.com",
+    projectId: "pride-storage",
+    storageBucket: "pride-storage.firebasestorage.app",
+    messagingSenderId: "1053485716586",
+    appId: "1:1053485716586:web:481f3116e4988f7da16613"
   };
 
   const app = initializeApp(firebaseConfig);
@@ -193,7 +207,7 @@ button { font-size: 18px; padding: 10px 16px; margin-top: 15px; }
   const auth = getAuth();
   signInAnonymously(auth);
 
-  // ▼ パネル切り替え
+  // ★ パネル切り替え
   function showPanel(num) {
     document.querySelectorAll('.input-panel').forEach(p => p.style.display = 'none');
     document.getElementById(`panel${num}`).style.display = 'block';
@@ -205,48 +219,78 @@ button { font-size: 18px; padding: 10px 16px; margin-top: 15px; }
     for (let i = 1; i <= 3; i++) {
       document.getElementById(`game${i}`).value = "";
       document.getElementById(`parallel${i}`).value = "";
-      document.getElementById(`msg${i}`).textContent = "";
     }
-
-    // 背景切替
-    if (num === 1) document.body.style.backgroundImage = "url('bg_sr.jpg')";
-    else if (num === 2) document.body.style.backgroundImage = "url('bg_marksman.jpg')";
-    else document.body.style.backgroundImage = "url('IMG_9924.JPG')";
   }
 
-  // 初期背景
-  document.body.style.backgroundImage = "url('IMG_9922.JPG')";
-
-  // ▼ Firestore 判定
-  async function checkEntry(num) {
+  // ★ Firestore 追加
+  async function addEntry(num) {
     const game = document.getElementById(`game${num}`).value.trim();
     const parallel = document.getElementById(`parallel${num}`).value.trim();
-    const msg = document.getElementById(`msg${num}`);
 
-    msg.textContent = "";
-    msg.className = "";
+    if (!game || !parallel) {
+      alert("両方入力してください");
+      return;
+    }
+
+    const ok = confirm(
+      `以下の内容でエントリーします。\n\n` +
+      `【ゲーム名】${game}\n` +
+      `【パラレル名】${parallel}\n\n` +
+      `よろしいですか？`
+    );
+
+    if (!ok) return;
 
     const colName =
       num === 1 ? "entries_SR" :
       num === 2 ? "entries_Marksman" :
                   "entries_Ladies";
 
-    const snap = await getDocs(collection(db, colName));
-
-    let found = false;
-    snap.forEach(doc => {
-      const d = doc.data();
-      if (d.name1 === game && d.name2 === parallel) found = true;
+    await addDoc(collection(db, colName), {
+      game,
+      parallel,
+      timestamp: Date.now()
     });
 
-    if (found) {
-      msg.textContent = "登録済みの組み合わせです";
-      msg.className = "ok";
-    } else {
-      msg.textContent = "エントリーされていない、もしくは名前が違います";
-      msg.className = "error";
-    }
+    alert("エントリーが完了しました");
+
+    document.getElementById(`game${num}`).value = "";
+    document.getElementById(`parallel${num}`).value = "";
+
+    loadList();
   }
+
+  // ★ Firestore 一覧読み込み
+  async function loadList() {
+    const list = document.getElementById("entryList");
+    list.innerHTML = "";
+
+    async function addSection(title, colName) {
+      const h = document.createElement("div");
+      h.style.fontWeight = "bold";
+      h.style.marginTop = "15px";
+      h.textContent = `■ ${title}`;
+      list.appendChild(h);
+
+      const snap = await getDocs(collection(db, colName));
+      let index = 1;
+
+      snap.forEach(doc => {
+        const d = doc.data();
+        const div = document.createElement("div");
+        div.className = "entry-item";
+        div.textContent = `${index}. ゲーム名：${d.game} ｜ パラレル名：${d.parallel}`;
+        list.appendChild(div);
+        index++;
+      });
+    }
+
+    await addSection("SR", "entries_SR");
+    await addSection("マークスマン", "entries_Marksman");
+    await addSection("レディース", "entries_Ladies");
+  }
+
+  loadList();
 </script>
 
 </body>
